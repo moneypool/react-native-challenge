@@ -1,15 +1,23 @@
-import React from 'react'
+import React, { PropTypes } from 'react'
 import {
   View,
   Text,
   TouchableWithoutFeedback,
   TextInput
 } from 'react-native'
+import { connect } from 'react-redux'
 import PillButton from '../Components/PillButton'
 import Styles from './Styles/HeaderStyles'
 import Icon from 'react-native-vector-icons/MaterialIcons'
+import ToDosActions from '../Redux/ToDosRedux'
 
-export default class Header extends React.Component {
+class Header extends React.Component {
+  static propTypes = {
+    dispatch: PropTypes.func,
+    addTask: PropTypes.func.isRequired,
+    changeFilter: PropTypes.func.isRequired,
+  }
+
   constructor (props) {
     super(props)
 
@@ -20,14 +28,27 @@ export default class Header extends React.Component {
     }
   }
 
-  _onPressAdd = () => this.setState({ addMode: !this.state.addMode, newTask: '' })
+  _onToggleAdd = () => this.setState({ addMode: !this.state.addMode, newTask: '' })
 
   _handleChangeTask = (newTask) => this.setState({ newTask })
-  _handlePressAdd = () => console.log('added')
+  _handlePressAdd = () => {
+    const { newTask, addMode, selectedFilter } = this.state
+    this.props.addTask(newTask, selectedFilter)
+    this.setState({ addMode: !addMode, newTask: '' })
+  }
 
-  _onPressFilterAll = () => this.setState({ selectedFilter: 'All' })
-  _onPressFilterCompleted = () => this.setState({ selectedFilter: 'Completed' })
-  _onPressFilterPending = () => this.setState({ selectedFilter: 'Pending' })
+  _onPressFilterAll = () => {
+    this.props.changeFilter('All')
+    this.setState({ selectedFilter: 'All' })
+  }
+  _onPressFilterCompleted = () => {
+    this.props.changeFilter('Completed')
+    this.setState({ selectedFilter: 'Completed' })
+  }
+  _onPressFilterPending = () => {
+    this.props.changeFilter('Pending')
+    this.setState({ selectedFilter: 'Pending' })
+  }
 
   _renderFiltersOrAdd () {
     const { addMode, selectedFilter, newTask } = this.state
@@ -79,7 +100,7 @@ export default class Header extends React.Component {
     return (
       <View style={Styles.navBar}>
         <Text style={[Styles.title, Styles.centered]}>myTODOS</Text>
-        <TouchableWithoutFeedback onPress={this._onPressAdd}>
+        <TouchableWithoutFeedback onPress={this._onToggleAdd}>
           <Icon style={Styles.add} name={addIcon} />
         </TouchableWithoutFeedback>
 
@@ -88,3 +109,14 @@ export default class Header extends React.Component {
     )
   }
 }
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    addTask: (task, filterBy) => {
+      dispatch(ToDosActions.addTask(task))
+    },
+    changeFilter: (filterBy) => dispatch(ToDosActions.changeFilter(filterBy)),
+  }
+}
+
+export default connect(null, mapDispatchToProps)(Header)

@@ -5,9 +5,11 @@ import { filter } from 'ramda'
 /* ------------- Types and Action Creators ------------- */
 
 const { Types, Creators } = createActions({
+  resetTasks: null,
   addTask: ['task'],
-  requestTasks: ['filter'],
-  removeTask: ['id']
+  removeTask: ['id'],
+  toggleCompletedTask: ['id'],
+  changeFilter: ['filterBy']
 })
 
 export const ToDosTypes = Types
@@ -18,28 +20,21 @@ export default Creators
 export const INITIAL_STATE = Immutable({
   tasks: [],
   index: 1,
-  filteredTasks: []
+  filterBy: 'All'
 })
 
 /* ------------- Reducers ------------- */
 
+export const reset = (state) => INITIAL_STATE
+
 // Add task
 export const add = (state, { task }) => {
-  let tasks = state.tasks
-  tasks.push({
+  const newTask = {
     title: task,
     completed: false,
     index: state.index
-  })
-  return state.merge({ index: state.index + 1, tasks })
-}
-
-// Request tasks
-export const request = (state, { filter }) => {
-  let filteredTasks = state.tasks
-  if (filter === 'Completed') filteredTasks = filter(n => n.completed, filteredTasks)
-  if (filter === 'Pending') filteredTasks = filter(n => !n.completed, filteredTasks)
-  return state.merge({ filteredTasks })
+  }
+  return state.merge({ index: state.index + 1, tasks: [...state.tasks, newTask] })
 }
 
 // Remove task
@@ -48,10 +43,27 @@ export const remove = (state, { id }) => {
   state.merge({ tasks })
 }
 
+// Toggle complete var of task
+export const toggleCompleted = (state, { id }) => {
+  // Get task and toggle completed state
+  let task = R.find(R.propEq('index', id))(state.tasks)
+  task.completed = !task.completed
+  // Remove current task from tasks and add updated task
+  let tasks = filter(n => n.index !== id, state.tasks)
+  tasks.push(task)
+  // Return updated tasks
+  return state.merge({ tasks })
+
+}
+
+export const changeFilter = (state, { filterBy }) => state.merge({ filterBy })
+
 /* ------------- Hookup Reducers To Types ------------- */
 
 export const reducer = createReducer(INITIAL_STATE, {
+  [Types.RESET_TASKS]: reset,
   [Types.ADD_TASK]: add,
-  [Types.REQUEST_TASKS]: request,
-  [Types.REMOVE_TASK]: remove
+  [Types.REMOVE_TASK]: remove,
+  [Types.TOGGLE_COMPLETED_TASK]: toggleCompleted,
+  [Types.CHANGE_FILTER]: changeFilter
 })

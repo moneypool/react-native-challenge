@@ -1,14 +1,16 @@
-import React from 'react'
+import React, { PropTypes } from 'react'
 import {
   ScrollView,
   RefreshControl,
   ListView,
   View
 } from 'react-native'
+import { connect } from 'react-redux'
 import Swipeout from 'react-native-swipeout'
 import CheckBox from 'react-native-check-box'
 import Styles from './Styles/CustomListStyles'
 import Colors from '../Themes/Colors'
+import ToDosActions from '../Redux/ToDosRedux'
 
 const rawData = [
   {
@@ -29,7 +31,14 @@ const rawData = [
   }
 ]
 
-export default class CustomList extends React.Component {
+class CustomList extends React.Component {
+  static propTypes = {
+    dispatch: PropTypes.func,
+    tasks: PropTypes.array,
+    toggleCompletedTask: PropTypes.func.isRequired,
+    removeTask: PropTypes.func.isRequired
+  }
+
   constructor (props) {
     super(props)
 
@@ -37,8 +46,14 @@ export default class CustomList extends React.Component {
     const ds = new ListView.DataSource({rowHasChanged})
 
     this.state = {
-      dataSource: ds.cloneWithRows(rawData)
+      dataSource: ds.cloneWithRows([])
     }
+  }
+
+  componentWillReceiveProps (nextProps) {
+    const { tasks } = nextProps
+    const { dataSource } = this.state
+    this.setState({dataSource: dataSource.cloneWithRows(tasks)})
   }
 
   _onClick (rowData) {
@@ -95,3 +110,20 @@ export default class CustomList extends React.Component {
     )
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+    tasks: state.todos.tasks,
+    filteredTasks: state.todos.filteredTasks,
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    toggleCompletedTask: (id) => dispatch(ToDosActions.toggleCompletedTask(id)),
+    removeTask: (id) => dispatch(ToDosActions.removeTask(id)),
+    resetTasks: () => dispatch(ToDosActions.resetTasks())
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(CustomList)
