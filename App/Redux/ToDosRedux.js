@@ -9,6 +9,7 @@ const { Types, Creators } = createActions({
   addTask: ['task'],
   removeTask: ['index'],
   toggleCompletedTask: ['index'],
+  toggleFavorite: ['index'],
   changeFilter: ['filterBy']
 })
 
@@ -32,7 +33,8 @@ export const add = (state, { task }) => {
   const newTask = {
     title: task,
     completed: false,
-    index: state.index
+    index: state.index,
+    favorite: false
   }
   return state.merge({ index: state.index + 1, tasks: [...state.tasks, newTask] })
 }
@@ -58,6 +60,21 @@ export const toggleCompleted = (state, { index }) => {
   return state.merge({ tasks: [...tasks, newTask] })
 }
 
+// Toggle favorite var of task
+export const toggleFavorite = (state, { index }) => {
+  console.log('toggling')
+  // Get task and create a new task with the favorite state toggled
+  const oldTask = find(propEq('index', index))(state.tasks)
+  const newTask = {
+    ...oldTask,
+    favorite: !oldTask.favorite
+  }
+  // Remove current task from tasks
+  let tasks = filter(n => n.index !== index, state.tasks)
+  // Return updated tasks
+  return state.merge({ tasks: [...tasks, newTask] })
+}
+
 export const changeFilter = (state, { filterBy }) => state.merge({ filterBy })
 
 /* ------------- Hookup Reducers To Types ------------- */
@@ -67,5 +84,6 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.ADD_TASK]: add,
   [Types.REMOVE_TASK]: remove,
   [Types.TOGGLE_COMPLETED_TASK]: toggleCompleted,
+  [Types.TOGGLE_FAVORITE]: toggleFavorite,
   [Types.CHANGE_FILTER]: changeFilter
 })

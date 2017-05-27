@@ -10,6 +10,7 @@ import { filter, sort, toLower } from 'ramda'
 import Swipeout from 'react-native-swipeout'
 import CheckBox from 'react-native-checkbox'
 import Styles from './Styles/CustomListStyles'
+import Icon from 'react-native-vector-icons/MaterialIcons'
 import Colors from '../Themes/Colors'
 import ToDosActions from '../Redux/ToDosRedux'
 
@@ -57,13 +58,32 @@ class CustomList extends React.Component {
     this.props.removeTask(rowData.index)
   }
 
+  _addFavorite (rowData) {
+    this.props.toggleFavorite(rowData.index)
+  }
+
+  _renderFavorite (favorite) {
+    if (favorite) {
+      return (
+        <Icon style={Styles.favorite} name='star' />
+      )
+    } else return null
+  }
+
   _renderRow (rowData) {
-    let swipeBtns = [{
-      text: 'Delete',
-      backgroundColor: 'red',
-      underlayColor: Colors.error,
-      onPress: () => { this._deleteTask(rowData) }
-    }]
+    let swipeBtns = [
+      {
+        text: 'Favorite',
+        backgroundColor: 'gold',
+        underlayColor: 'gold',
+        onPress: () => { this._addFavorite(rowData) }
+      },
+      {
+        text: 'Delete',
+        backgroundColor: 'red',
+        underlayColor: Colors.error,
+        onPress: () => { this._deleteTask(rowData) }
+      }]
     return (
       <Swipeout
         right={swipeBtns}
@@ -78,6 +98,7 @@ class CustomList extends React.Component {
             checkboxStyle={Styles.listCheckbox}
             labelStyle={Styles.listText}
           />
+          {this._renderFavorite(rowData.favorite)}
         </View>
       </Swipeout>
     )
@@ -115,7 +136,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     toggleCompletedTask: (index) => dispatch(ToDosActions.toggleCompletedTask(index)),
     removeTask: (index) => dispatch(ToDosActions.removeTask(index)),
-    resetTasks: () => dispatch(ToDosActions.resetTasks())
+    resetTasks: () => dispatch(ToDosActions.resetTasks()),
+    toggleFavorite: (index) => dispatch(ToDosActions.toggleFavorite(index))
   }
 }
 

@@ -13,9 +13,18 @@ export default StyleSheet.create({
     padding: Metrics.baseMargin,
     backgroundColor: Colors.white,
     margin: 0,
-    marginBottom: 0
+    marginBottom: 0,
+    paddingRight: 43
   },
   listText: {
     ...Fonts.style.normal
+  },
+  favorite: {
+    color: 'gold',
+    position: 'absolute',
+    fontSize: 24,
+    right: Metrics.smallMargin,
+    top: 10
+
   }
 })
