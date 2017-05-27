@@ -7,7 +7,8 @@ const colors = {
   lightGray: '#DDD',
 
   mainColor: '#e32f66',
-  background: '#B3E9C7'
+  background: '#B3E9C7',
+  backgroundLLight: 'rgba(179, 233, 199, 0.1)'
 }
 
 export default colors

@@ -3,10 +3,10 @@ import { Colors, Metrics, Fonts } from '../../Themes/'
 
 export default StyleSheet.create({
   navBar: {
-    flex: 1,
-    height: Metrics.navBarHeight,
     paddingTop: Metrics.doubleBaseMargin,
-    backgroundColor: Colors.white
+    backgroundColor: Colors.white,
+    borderBottomWidth: 3,
+    borderBottomColor: Colors.mainColor
   },
   title: {
     ...Fonts.style.h1,
@@ -23,6 +23,7 @@ export default StyleSheet.create({
     top: 24
   },
   filters: {
+    backgroundColor: Colors.backgroundLLight,
     flexDirection: 'row',
     justifyContent: 'space-around'
   }

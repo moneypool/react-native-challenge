@@ -5,7 +5,9 @@ export default StyleSheet.create({
   ...ApplicationStyles.screen,
   ...ApplicationStyles.general,
   mainContent: {
-    paddingTop: Metrics.doubleBaseMargin
+    flex: 1,
+    paddingTop: Metrics.doubleBaseMargin,
+    backgroundColor: Colors.background
   },
   addInput: {
     height: 40,

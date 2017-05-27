@@ -22,7 +22,6 @@ export default class Header extends React.Component {
 
   render () {
     const { selectedFilter } = this.state
-    console.log(selectedFilter)
     return (
       <View style={Styles.navBar}>
         <Text style={[Styles.title, Styles.centered]}>myTODOS</Text>
