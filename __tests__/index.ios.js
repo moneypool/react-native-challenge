@@ -1,12 +1,14 @@
-import 'react-native';
-import React from 'react';
-import Index from '../index.ios.js';
+import 'react-native'
+import React from 'react'
+import ToDoList from '../App/Containers/ToDoList'
 
 // Note: test renderer must be required after react-native.
-import renderer from 'react-test-renderer';
+import renderer from 'react-test-renderer'
 
-it('renders correctly', () => {
-  const tree = renderer.create(
-    <Index />
-  );
-});
+test('renders correctly', () => {
+  const component = renderer.create(
+    <ToDoList />
+  )
+  let tree = component.toJSON()
+  expect(tree).toMatchSnapshot()
+})
