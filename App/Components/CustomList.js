@@ -2,16 +2,12 @@ import React, { PropTypes } from 'react'
 import {
   ScrollView,
   RefreshControl,
-  ListView,
-  View
+  ListView
 } from 'react-native'
 import { connect } from 'react-redux'
+import CustomListItem from '../Components/CustomListItem'
 import { filter, sort, toLower } from 'ramda'
-import Swipeout from 'react-native-swipeout'
-import CheckBox from 'react-native-checkbox'
 import Styles from './Styles/CustomListStyles'
-import Icon from 'react-native-vector-icons/MaterialIcons'
-import Colors from '../Themes/Colors'
 import ToDosActions from '../Redux/ToDosRedux'
 
 class CustomList extends React.Component {
@@ -50,57 +46,9 @@ class CustomList extends React.Component {
     this.setState({dataSource: dataSource.cloneWithRows(filteredTasks)})
   }
 
-  _onClick (rowData) {
-    this.props.toggleCompletedTask(rowData.index)
-  }
-
-  _deleteTask (rowData) {
-    this.props.removeTask(rowData.index)
-  }
-
-  _addFavorite (rowData) {
-    this.props.toggleFavorite(rowData.index)
-  }
-
-  _renderFavorite (favorite) {
-    if (favorite) {
-      return (
-        <Icon style={Styles.favorite} name='star' />
-      )
-    } else return null
-  }
-
   _renderRow (rowData) {
-    let swipeBtns = [
-      {
-        text: 'Favorite',
-        backgroundColor: 'gold',
-        underlayColor: 'gold',
-        onPress: () => { this._addFavorite(rowData) }
-      },
-      {
-        text: 'Delete',
-        backgroundColor: 'red',
-        underlayColor: Colors.error,
-        onPress: () => { this._deleteTask(rowData) }
-      }]
     return (
-      <Swipeout
-        right={swipeBtns}
-        autoClose
-        backgroundColor='transparent'>
-        <View style={Styles.listContainer}>
-          <CheckBox
-            label={rowData.title}
-            checked={rowData.completed}
-            onChange={() => this._onClick(rowData)}
-            containerStyle={Styles.listCheckboxContainer}
-            checkboxStyle={Styles.listCheckbox}
-            labelStyle={Styles.listText}
-          />
-          {this._renderFavorite(rowData.favorite)}
-        </View>
-      </Swipeout>
+      <CustomListItem taskInfo={rowData} />
     )
   }
 
@@ -134,10 +82,10 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    toggleCompletedTask: (index) => dispatch(ToDosActions.toggleCompletedTask(index)),
-    removeTask: (index) => dispatch(ToDosActions.removeTask(index)),
+    toggleCompletedTask: index => dispatch(ToDosActions.toggleCompletedTask(index)),
+    removeTask: index => dispatch(ToDosActions.removeTask(index)),
     resetTasks: () => dispatch(ToDosActions.resetTasks()),
-    toggleFavorite: (index) => dispatch(ToDosActions.toggleFavorite(index))
+    toggleFavorite: index => dispatch(ToDosActions.toggleFavorite(index))
   }
 }
 
