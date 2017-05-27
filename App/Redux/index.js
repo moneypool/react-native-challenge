@@ -4,7 +4,7 @@ import configureStore from './CreateStore'
 export default () => {
     /* ------------- Assemble The Reducers ------------- */
   const rootReducer = combineReducers({
-    startup: require('./StartupRedux').reducer
+    todos: require('./ToDosRedux').reducer
   })
 
   return configureStore(rootReducer)
