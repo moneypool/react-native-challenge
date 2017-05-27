@@ -6,31 +6,12 @@ import {
   View
 } from 'react-native'
 import { connect } from 'react-redux'
-import { filter } from 'ramda'
+import { filter, sort, toLower } from 'ramda'
 import Swipeout from 'react-native-swipeout'
-import CheckBox from 'react-native-check-box'
+import CheckBox from 'react-native-checkbox'
 import Styles from './Styles/CustomListStyles'
 import Colors from '../Themes/Colors'
 import ToDosActions from '../Redux/ToDosRedux'
-
-const rawData = [
-  {
-    title: 'Drink water',
-    completed: false
-  },
-  {
-    title: 'Go to the gym',
-    completed: true
-  },
-  {
-    title: 'Do homework',
-    completed: false
-  },
-  {
-    title: 'Watch TV',
-    completed: true
-  }
-]
 
 class CustomList extends React.Component {
   static propTypes = {
@@ -44,7 +25,8 @@ class CustomList extends React.Component {
   constructor (props) {
     super(props)
 
-    const rowHasChanged = (r1, r2) => r1.index !== r2.index
+    // This could be faster, but checkbox crashes
+    const rowHasChanged = (r1, r2) => r1 !== r2
     const ds = new ListView.DataSource({rowHasChanged})
 
     this.state = {
@@ -53,18 +35,21 @@ class CustomList extends React.Component {
   }
 
   componentWillReceiveProps (nextProps) {
+    // Get data from Redux
     const { tasks, filterBy } = nextProps
-    console.log(tasks)
+    // Get dataSource for ListView
     const { dataSource } = this.state
-    let filteredTasks = tasks
+    // Sort data in descending order by title
+    let filteredTasks = sort((a, b) => toLower(a.title) > toLower(b.title), tasks)
+    // Apply filters if necessary
     if (filterBy === 'Completed') filteredTasks = filter(n => n.completed, filteredTasks)
     if (filterBy === 'Pending') filteredTasks = filter(n => !n.completed, filteredTasks)
-    console.log('filter', filteredTasks)
+
+    // Update dataSource with completely processed data
     this.setState({dataSource: dataSource.cloneWithRows(filteredTasks)})
   }
 
   _onClick (rowData) {
-    console.log('clicked', rowData)
     this.props.toggleCompletedTask(rowData.index)
   }
 
@@ -79,7 +64,6 @@ class CustomList extends React.Component {
       underlayColor: Colors.error,
       onPress: () => { this._deleteTask(rowData) }
     }]
-    console.log('render', rowData)
     return (
       <Swipeout
         right={swipeBtns}
@@ -87,11 +71,12 @@ class CustomList extends React.Component {
         backgroundColor='transparent'>
         <View style={Styles.listContainer}>
           <CheckBox
-            style={Styles.listCheckbox}
-            isChecked={rowData.completed}
-            onClick={() => this._onClick(rowData)}
-            rightText={rowData.title}
-            rightTextStyle={Styles.listText}
+            label={rowData.title}
+            checked={rowData.completed}
+            onChange={() => this._onClick(rowData)}
+            containerStyle={Styles.listCheckboxContainer}
+            checkboxStyle={Styles.listCheckbox}
+            labelStyle={Styles.listText}
           />
         </View>
       </Swipeout>
@@ -122,7 +107,7 @@ class CustomList extends React.Component {
 const mapStateToProps = (state) => {
   return {
     tasks: state.todos.tasks,
-    filterBy: state.todos.filterBy,
+    filterBy: state.todos.filterBy
   }
 }
 

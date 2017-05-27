@@ -15,7 +15,7 @@ class Header extends React.Component {
   static propTypes = {
     dispatch: PropTypes.func,
     addTask: PropTypes.func.isRequired,
-    changeFilter: PropTypes.func.isRequired,
+    changeFilter: PropTypes.func.isRequired
   }
 
   constructor (props) {
@@ -115,7 +115,7 @@ const mapDispatchToProps = (dispatch) => {
     addTask: (task, filterBy) => {
       dispatch(ToDosActions.addTask(task))
     },
-    changeFilter: (filterBy) => dispatch(ToDosActions.changeFilter(filterBy)),
+    changeFilter: (filterBy) => dispatch(ToDosActions.changeFilter(filterBy))
   }
 }
 

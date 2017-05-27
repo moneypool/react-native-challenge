@@ -56,7 +56,6 @@ export const toggleCompleted = (state, { index }) => {
   let tasks = filter(n => n.index !== index, state.tasks)
   // Return updated tasks
   return state.merge({ tasks: [...tasks, newTask] })
-
 }
 
 export const changeFilter = (state, { filterBy }) => state.merge({ filterBy })

@@ -9,10 +9,11 @@ export default StyleSheet.create({
     borderBottomColor: Colors.mainColor,
     borderBottomWidth: 3
   },
-  listCheckbox: {
+  listCheckboxContainer: {
     padding: Metrics.baseMargin,
     backgroundColor: Colors.white,
-    margin: 0
+    margin: 0,
+    marginBottom: 0
   },
   listText: {
     ...Fonts.style.normal
