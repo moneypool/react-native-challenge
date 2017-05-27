@@ -40,7 +40,7 @@ export const add = (state, { task }) => {
 // Remove task
 export const remove = (state, { index }) => {
   let tasks = filter(n => n.index !== index, state.tasks)
-  state.merge({ tasks })
+  return state.merge({ tasks })
 }
 
 // Toggle complete var of task
