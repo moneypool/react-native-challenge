@@ -4,13 +4,39 @@ exports[`renders correctly 1`] = `
 <View
   style={
     Object {
-      "alignItems": "center",
-      "backgroundColor": "#F5FCFF",
       "flex": 1,
-      "justifyContent": "center",
     }
   }
 >
+  <View
+    style={
+      Object {
+        "backgroundColor": "#00B1A2",
+        "height": 64,
+        "paddingTop": 10,
+      }
+    }
+  >
+    <Text
+      accessible={true}
+      allowFontScaling={true}
+      ellipsizeMode="tail"
+      style={
+        Array [
+          Object {
+            "color": "#FEECD8",
+            "fontFamily": "Avenir-Book",
+            "fontSize": 38,
+            "marginTop": 5,
+            "textAlign": "center",
+          },
+          undefined,
+        ]
+      }
+    >
+      myTO-DO-S
+    </Text>
+  </View>
   <Text
     accessible={true}
     allowFontScaling={true}

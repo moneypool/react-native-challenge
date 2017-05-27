@@ -1,20 +1,17 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
-
 import React, { Component } from 'react'
 import {
   StyleSheet,
   Text,
   View
 } from 'react-native'
+import Header from '../Components/Header'
+import Styles from './Styles/ToDoListStyle'
 
 export default class ToDoList extends Component {
   render () {
     return (
-      <View style={styles.container}>
+      <View style={Styles.mainContainer} >
+        <Header />
         <Text style={styles.welcome}>
           Welcome to React Native!
         </Text>
