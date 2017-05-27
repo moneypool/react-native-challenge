@@ -1,14 +1,14 @@
 import { createReducer, createActions } from 'reduxsauce'
 import Immutable from 'seamless-immutable'
-import { filter } from 'ramda'
+import { find, filter, propEq } from 'ramda'
 
 /* ------------- Types and Action Creators ------------- */
 
 const { Types, Creators } = createActions({
   resetTasks: null,
   addTask: ['task'],
-  removeTask: ['id'],
-  toggleCompletedTask: ['id'],
+  removeTask: ['index'],
+  toggleCompletedTask: ['index'],
   changeFilter: ['filterBy']
 })
 
@@ -38,21 +38,24 @@ export const add = (state, { task }) => {
 }
 
 // Remove task
-export const remove = (state, { id }) => {
-  let tasks = filter(n => n.index !== id, state.tasks)
+export const remove = (state, { index }) => {
+  let tasks = filter(n => n.index !== index, state.tasks)
   state.merge({ tasks })
 }
 
 // Toggle complete var of task
-export const toggleCompleted = (state, { id }) => {
-  // Get task and toggle completed state
-  let task = R.find(R.propEq('index', id))(state.tasks)
-  task.completed = !task.completed
-  // Remove current task from tasks and add updated task
-  let tasks = filter(n => n.index !== id, state.tasks)
-  tasks.push(task)
+export const toggleCompleted = (state, { index }) => {
+  console.log('toggling')
+  // Get task and create a new task with the completed state toggled
+  const oldTask = find(propEq('index', index))(state.tasks)
+  const newTask = {
+    ...oldTask,
+    completed: !oldTask.completed
+  }
+  // Remove current task from tasks
+  let tasks = filter(n => n.index !== index, state.tasks)
   // Return updated tasks
-  return state.merge({ tasks })
+  return state.merge({ tasks: [...tasks, newTask] })
 
 }
 

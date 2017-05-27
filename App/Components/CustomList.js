@@ -6,6 +6,7 @@ import {
   View
 } from 'react-native'
 import { connect } from 'react-redux'
+import { filter } from 'ramda'
 import Swipeout from 'react-native-swipeout'
 import CheckBox from 'react-native-check-box'
 import Styles from './Styles/CustomListStyles'
@@ -35,6 +36,7 @@ class CustomList extends React.Component {
   static propTypes = {
     dispatch: PropTypes.func,
     tasks: PropTypes.array,
+    filterBy: PropTypes.string,
     toggleCompletedTask: PropTypes.func.isRequired,
     removeTask: PropTypes.func.isRequired
   }
@@ -42,7 +44,7 @@ class CustomList extends React.Component {
   constructor (props) {
     super(props)
 
-    const rowHasChanged = (r1, r2) => r1 !== r2
+    const rowHasChanged = (r1, r2) => r1.index !== r2.index
     const ds = new ListView.DataSource({rowHasChanged})
 
     this.state = {
@@ -51,17 +53,23 @@ class CustomList extends React.Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    const { tasks } = nextProps
+    const { tasks, filterBy } = nextProps
+    console.log(tasks)
     const { dataSource } = this.state
-    this.setState({dataSource: dataSource.cloneWithRows(tasks)})
+    let filteredTasks = tasks
+    if (filterBy === 'Completed') filteredTasks = filter(n => n.completed, filteredTasks)
+    if (filterBy === 'Pending') filteredTasks = filter(n => !n.completed, filteredTasks)
+    console.log('filter', filteredTasks)
+    this.setState({dataSource: dataSource.cloneWithRows(filteredTasks)})
   }
 
   _onClick (rowData) {
-    console.log('checked', rowData)
+    console.log('clicked', rowData)
+    this.props.toggleCompletedTask(rowData.index)
   }
 
   _deleteTask (rowData) {
-    console.log('delete', rowData)
+    this.props.removeTask(rowData.index)
   }
 
   _renderRow (rowData) {
@@ -71,7 +79,7 @@ class CustomList extends React.Component {
       underlayColor: Colors.error,
       onPress: () => { this._deleteTask(rowData) }
     }]
-
+    console.log('render', rowData)
     return (
       <Swipeout
         right={swipeBtns}
@@ -114,14 +122,14 @@ class CustomList extends React.Component {
 const mapStateToProps = (state) => {
   return {
     tasks: state.todos.tasks,
-    filteredTasks: state.todos.filteredTasks,
+    filterBy: state.todos.filterBy,
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    toggleCompletedTask: (id) => dispatch(ToDosActions.toggleCompletedTask(id)),
-    removeTask: (id) => dispatch(ToDosActions.removeTask(id)),
+    toggleCompletedTask: (index) => dispatch(ToDosActions.toggleCompletedTask(index)),
+    removeTask: (index) => dispatch(ToDosActions.removeTask(index)),
     resetTasks: () => dispatch(ToDosActions.resetTasks())
   }
 }
