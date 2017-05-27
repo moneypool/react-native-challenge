@@ -5,9 +5,10 @@ const colors = {
   transparent: 'rgba(0, 0, 0, 0.0)',
   white: '#FFF',
   lightGray: '#DDD',
+  lighterGray: '#f1f1f1',
 
   mainColor: '#e32f66',
-  background: '#B3E9C7',
+  background: '#D0E0DD',
   backgroundLLight: 'rgba(179, 233, 199, 0.1)'
 }
 
