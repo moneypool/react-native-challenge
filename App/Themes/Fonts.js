@@ -1,5 +1,5 @@
 const type = {
-  base: 'Avenir-Book',
+  base: 'Avenir',
   bold: 'Avenir-Black'
 }
 
@@ -13,7 +13,7 @@ const size = {
 
 const style = {
   h1: {
-    fontFamily: type.base,
+    fontFamily: type.bold,
     fontSize: size.h1
   },
   h2: {
