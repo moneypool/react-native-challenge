@@ -1,8 +1,9 @@
 import React, { PropTypes } from 'react'
 import {
+  View,
   ScrollView,
-  RefreshControl,
-  ListView
+  ListView,
+  Text
 } from 'react-native'
 import { connect } from 'react-redux'
 import CustomListItem from '../Components/CustomListItem'
@@ -52,22 +53,32 @@ class CustomList extends React.Component {
     )
   }
 
-  render () {
+  _renderResults () {
     const { dataSource } = this.state
-    const searching = false
-    return (
-      <ScrollView style={Styles.container}>
+    const { tasks } = this.props
+    if (tasks.length) {
+      return (
         <ListView
           enableEmptySections
           automaticallyAdjustContentInsets={false}
           dataSource={dataSource}
           renderRow={row => this._renderRow(row)}
-          refreshControl={
-            <RefreshControl
-              refreshing={searching}
-            />
-          }
         />
+      )
+    } else {
+      return (
+        <View>
+          <Text style={Styles.noResults}>No tasks yet :(</Text>
+          <Text style={Styles.noResults}>Let's add something fun</Text>
+        </View>
+      )
+    }
+  }
+
+  render () {
+    return (
+      <ScrollView style={Styles.container}>
+        {this._renderResults()}
       </ScrollView>
     )
   }
