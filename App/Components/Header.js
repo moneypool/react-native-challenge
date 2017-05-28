@@ -32,8 +32,8 @@ class Header extends React.Component {
 
   _handleChangeTask = (newTask) => this.setState({ newTask })
   _handlePressAdd = () => {
-    const { newTask, addMode, selectedFilter } = this.state
-    this.props.addTask(newTask, selectedFilter)
+    const { newTask, addMode } = this.state
+    this.props.addTask(newTask)
     this.setState({ addMode: !addMode, newTask: '' })
   }
 
@@ -112,10 +112,8 @@ class Header extends React.Component {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    addTask: (task, filterBy) => {
-      dispatch(ToDosActions.addTask(task))
-    },
-    changeFilter: (filterBy) => dispatch(ToDosActions.changeFilter(filterBy))
+    addTask: task => dispatch(ToDosActions.addTask(task)),
+    changeFilter: filterBy => dispatch(ToDosActions.changeFilter(filterBy))
   }
 }
 

@@ -1,11 +1,13 @@
 import React, { PropTypes } from 'react'
 import {
-  View
+  View,
+  TextInput,
+  TouchableWithoutFeedback
 } from 'react-native'
 import { connect } from 'react-redux'
 import Swipeout from 'react-native-swipeout'
 import CheckBox from 'react-native-checkbox'
-import Styles from './Styles/CustomListStyles'
+import Styles from './Styles/CustomListItemStyles'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import Colors from '../Themes/Colors'
 import ToDosActions from '../Redux/ToDosRedux'
@@ -24,6 +26,15 @@ class CustomListItem extends React.Component {
     removeTask: PropTypes.func.isRequired
   }
 
+  constructor (props) {
+    super(props)
+
+    this.state = {
+      editMode: false,
+      editText: this.props.taskInfo.title
+    }
+  }
+
   _onToggleCheckbox (index) {
     this.props.toggleCompletedTask(index)
   }
@@ -36,6 +47,19 @@ class CustomListItem extends React.Component {
     this.props.toggleFavorite(index)
   }
 
+  _toggleEdit () {
+    this.setState({ editMode: !this.state.editMode })
+  }
+
+  _handleEditTask = (editText) => this.setState({ editText })
+
+  _handlePressEdit = () => {
+    const { editText, editMode } = this.state
+    const { index } = this.props.taskInfo
+    this.props.editTask(editText, index)
+    this.setState({ editMode: !editMode })
+  }
+
   _renderFavorite (favorite) {
     if (favorite) {
       return (
@@ -44,61 +68,94 @@ class CustomListItem extends React.Component {
     } else return null
   }
 
-  render () {
+  _renderEditOrCheckbox () {
+    const { editMode, editText } = this.state
+    const { index, title, completed, favorite } = this.props.taskInfo
     const swipeBtns = [
       {
         text: 'Favorite',
         backgroundColor: 'gold',
         underlayColor: 'gold',
-        onPress: () => { this._addFavorite(index) }
+        onPress: () => this._addFavorite(index)
       },
       {
         text: 'Edit',
         backgroundColor: 'blue',
         underlayColor: 'blue',
-        //onPress: () => { this._edit(rowData) }
+        onPress: () => this._toggleEdit()
       },
       {
         text: 'Delete',
         backgroundColor: 'red',
         underlayColor: Colors.error,
-        onPress: () => { this._deleteTask(index) }
-      }]
-    const { index, title, completed, favorite } = this.props.taskInfo
-    return (
-      <Swipeout
-        right={swipeBtns}
-        autoClose
-        backgroundColor='transparent'>
-        <View style={Styles.listContainer}>
-          <CheckBox
-            label={title}
-            checked={completed}
-            onChange={() => this._onToggleCheckbox(index)}
-            containerStyle={Styles.listCheckboxContainer}
-            checkboxStyle={Styles.listCheckbox}
-            labelStyle={Styles.listText}
-          />
-          {this._renderFavorite(favorite)}
+        onPress: () => this._deleteTask(index)
+      }
+    ]
+    // When edit mode is off, the normal cell is rendered, with the checkbox
+    if (!editMode) {
+      return (
+        <Swipeout
+          right={swipeBtns}
+          autoClose
+          backgroundColor='transparent'>
+          <View>
+            <CheckBox
+              label={title}
+              checked={completed}
+              onChange={() => this._onToggleCheckbox(index)}
+              containerStyle={Styles.listCheckboxContainer}
+              checkboxStyle={Styles.listCheckbox}
+              labelStyle={Styles.listText}
+            />
+            {this._renderFavorite(favorite)}
+          </View>
+        </Swipeout>
+      )
+    } else {
+      // Edit mode is on, so render input
+      return (
+        <View>
+          <View style={Styles.editInput}>
+            <TextInput
+              style={Styles.editInputText}
+              value={editText}
+              keyboardType='default'
+              returnKeyType='go'
+              autoCapitalize='none'
+              onChangeText={this._handleEditTask}
+              underlineColorAndroid='transparent'
+              onSubmitEditing={this._handlePressEdit}
+              placeholder='Type to edit task' />
+          </View>
+          {/* Submit edit button */}
+          <TouchableWithoutFeedback onPress={this._handlePressEdit}>
+            <Icon style={[Styles.editButtons, Styles.editSubmit]} name='check-circle' />
+          </TouchableWithoutFeedback>
+          {/* Cancel edit button */}
+          <TouchableWithoutFeedback onPress={() => this._toggleEdit()}>
+            <Icon style={[Styles.editButtons, Styles.editClose]} name='close' />
+          </TouchableWithoutFeedback>
         </View>
-      </Swipeout>
-    )
+      )
+    }
   }
-}
 
-const mapStateToProps = (state) => {
-  return {
-    tasks: state.todos.tasks,
-    filterBy: state.todos.filterBy
+  render () {
+    return (
+      <View style={Styles.listContainer}>
+        {this._renderEditOrCheckbox()}
+      </View>
+    )
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    toggleCompletedTask: (index) => dispatch(ToDosActions.toggleCompletedTask(index)),
-    removeTask: (index) => dispatch(ToDosActions.removeTask(index)),
-    toggleFavorite: (index) => dispatch(ToDosActions.toggleFavorite(index))
+    toggleCompletedTask: index => dispatch(ToDosActions.toggleCompletedTask(index)),
+    removeTask: index => dispatch(ToDosActions.removeTask(index)),
+    toggleFavorite: index => dispatch(ToDosActions.toggleFavorite(index)),
+    editTask: (task, index) => dispatch(ToDosActions.editTask(task, index))
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CustomListItem)
+export default connect(null, mapDispatchToProps)(CustomListItem)
