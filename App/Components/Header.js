@@ -6,6 +6,7 @@ import {
   TextInput
 } from 'react-native'
 import { connect } from 'react-redux'
+import { filter } from 'ramda'
 import PillButton from '../Components/PillButton'
 import Styles from './Styles/HeaderStyles'
 import Icon from 'react-native-vector-icons/MaterialIcons'
@@ -24,8 +25,19 @@ class Header extends React.Component {
     this.state = {
       selectedFilter: 'All',
       addMode: false,
-      newTask: ''
+      newTask: '',
+      pendingLength: 0
     }
+  }
+
+  componentWillReceiveProps (nextProps) {
+    // Get data from Redux
+    const { tasks } = nextProps
+    // Get pending tasks length
+    const pendingLength = filter(n => !n.completed, tasks).length
+
+    // Update dataSource with completely processed data
+    this.setState({ pendingLength })
   }
 
   _onToggleAdd = () => this.setState({ addMode: !this.state.addMode, newTask: '' })
@@ -51,8 +63,7 @@ class Header extends React.Component {
   }
 
   _renderFiltersOrAdd () {
-    const { addMode, selectedFilter, newTask } = this.state
-    const editable = true
+    const { addMode, selectedFilter, newTask, pendingLength } = this.state
     if (addMode) {
       return (
         <View>
@@ -60,7 +71,6 @@ class Header extends React.Component {
             <TextInput
               style={Styles.addInputText}
               value={newTask}
-              editable={editable}
               keyboardType='default'
               returnKeyType='go'
               autoCapitalize='none'
@@ -86,7 +96,7 @@ class Header extends React.Component {
             onPress={this._onPressFilterCompleted}
             isActive={selectedFilter === 'Completed'} />
           <PillButton
-            text={'Pending'}
+            text={`Pending - ${pendingLength}`}
             onPress={this._onPressFilterPending}
             isActive={selectedFilter === 'Pending'} />
         </View>
@@ -110,6 +120,12 @@ class Header extends React.Component {
   }
 }
 
+const mapStateToProps = (state) => {
+  return {
+    tasks: state.todos.tasks
+  }
+}
+
 const mapDispatchToProps = (dispatch) => {
   return {
     addTask: task => dispatch(ToDosActions.addTask(task)),
@@ -117,4 +133,4 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-export default connect(null, mapDispatchToProps)(Header)
+export default connect(mapStateToProps, mapDispatchToProps)(Header)

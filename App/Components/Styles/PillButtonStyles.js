@@ -12,7 +12,7 @@ export default StyleSheet.create({
     marginBottom: Metrics.baseMargin,
     paddingLeft: Metrics.baseMargin,
     paddingRight: Metrics.baseMargin,
-    minWidth: 70
+    minWidth: 60
   },
   buttonActive: {
     backgroundColor: Colors.mainColor,
