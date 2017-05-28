@@ -9,7 +9,7 @@ import { connect } from 'react-redux'
 import StartupActions from '../Redux/StartupRedux'
 import ReduxPersist from '../Config/ReduxPersist'
 
-class ToDoList extends Component {
+export class ToDoList extends Component {
   constructor (props) {
     super(props)
 

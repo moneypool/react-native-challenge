@@ -12,7 +12,7 @@ import Styles from './Styles/HeaderStyles'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import ToDosActions from '../Redux/ToDosRedux'
 
-class Header extends React.Component {
+export class Header extends React.Component {
   static propTypes = {
     dispatch: PropTypes.func,
     addTask: PropTypes.func.isRequired,

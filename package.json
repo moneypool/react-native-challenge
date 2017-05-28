@@ -55,6 +55,7 @@
       "describe",
       "test",
       "expect",
+      "it",
       "fetch",
       "navigator",
       "__DEV__",
