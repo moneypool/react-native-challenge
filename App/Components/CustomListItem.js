@@ -12,7 +12,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons'
 import Colors from '../Themes/Colors'
 import ToDosActions from '../Redux/ToDosRedux'
 
-class CustomListItem extends React.Component {
+export class CustomListItem extends React.Component {
   static propTypes = {
     dispatch: PropTypes.func,
     taskInfo: PropTypes.shape({
@@ -29,9 +29,11 @@ class CustomListItem extends React.Component {
   constructor (props) {
     super(props)
 
+    const { title = '' } = this.props
+
     this.state = {
       editMode: false,
-      editText: this.props.taskInfo.title
+      editText: title
     }
   }
 
@@ -70,7 +72,7 @@ class CustomListItem extends React.Component {
 
   _renderEditOrCheckbox () {
     const { editMode, editText } = this.state
-    const { index, title, completed, favorite } = this.props.taskInfo
+    const { index = 0, title = '', completed = true, favorite = true } = this.props.taskInfo || {}
     const swipeBtns = [
       {
         text: 'Favorite',

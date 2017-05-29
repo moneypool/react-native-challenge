@@ -6,6 +6,7 @@ import {
 import { shallow } from 'enzyme'
 import { Header } from '../App/Containers/Header'
 import { CustomList } from '../App/Containers/CustomList'
+import { CustomListItem } from '../App/Components/CustomListItem'
 import App from '../App/Containers/App'
 import PillButton from '../App/Components/PillButton'
 
@@ -61,6 +62,15 @@ describe('>>>CustomList --- Snapshot', () => {
   })
 })
 
+describe('>>>CustomListItem --- Snapshot', () => {
+  it('render correctly', () => {
+    const renderedComponent = renderer.create(
+      <CustomListItem />
+    ).toJSON()
+    expect(renderedComponent).toMatchSnapshot()
+  })
+})
+
 describe('>>>Header --- Shallow Render', () => {
   let wrapper
 
@@ -108,5 +118,17 @@ describe('>>>CustomList --- Shallow Render', () => {
     expect(wrapper.find(Text)).toHaveLength(2)
     expect(wrapper.find(Text).first().props().children).toBe('No tasks yet :(')
     expect(wrapper.find(Text).last().props().children).toBe(`Let's add something fun`)
+  })
+})
+
+describe('>>>CustomListItem --- Shallow Render', () => {
+  let wrapper
+
+  beforeEach(() => {
+    wrapper = shallow(<CustomListItem />)
+  })
+
+  it('render the dumb component', () => {
+    expect(wrapper.length).toEqual(1)
   })
 })

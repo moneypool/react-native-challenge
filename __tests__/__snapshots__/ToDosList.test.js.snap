@@ -341,6 +341,177 @@ exports[`>>>CustomList --- Snapshot render correctly 1`] = `
 </RCTScrollView>
 `;
 
+exports[`>>>CustomListItem --- Snapshot render correctly 1`] = `
+<View
+  style={
+    Object {
+      "borderBottomColor": "#e32f66",
+      "borderBottomWidth": 3,
+    }
+  }
+>
+  <View
+    style={
+      Array [
+        Object {
+          "backgroundColor": "#dbddde",
+          "overflow": "hidden",
+        },
+        undefined,
+        Array [
+          Object {
+            "backgroundColor": "transparent",
+          },
+        ],
+      ]
+    }
+  >
+    <View
+      onLayout={[Function]}
+      onMoveShouldSetResponder={[Function]}
+      onMoveShouldSetResponderCapture={[Function]}
+      onResponderEnd={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderReject={[Function]}
+      onResponderRelease={[Function]}
+      onResponderStart={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      onStartShouldSetResponderCapture={[Function]}
+      style={
+        Array [
+          Object {},
+          Object {
+            "left": 0,
+          },
+        ]
+      }
+    >
+      <View>
+        <View
+          accessibilityComponentType={undefined}
+          accessibilityLabel={undefined}
+          accessibilityTraits={undefined}
+          accessible={true}
+          hasTVPreferredFocus={undefined}
+          hitSlop={undefined}
+          isTVSelectable={true}
+          onLayout={undefined}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            Array [
+              Object {
+                "backgroundColor": "transparent",
+              },
+              undefined,
+            ]
+          }
+          testID={undefined}
+          tvParallaxProperties={undefined}
+        >
+          <View
+            style={
+              Array [
+                Object {
+                  "alignItems": "center",
+                  "flexDirection": "row",
+                  "marginBottom": 5,
+                },
+                Object {
+                  "backgroundColor": "#FFF",
+                  "margin": 0,
+                  "marginBottom": 0,
+                  "padding": 10,
+                  "paddingRight": 43,
+                },
+              ]
+            }
+          >
+            <Image
+              source={1}
+              style={
+                Array [
+                  Object {
+                    "height": 26,
+                    "width": 26,
+                  },
+                  undefined,
+                ]
+              }
+            />
+            <View
+              style={
+                Object {
+                  "marginLeft": 10,
+                  "marginRight": 10,
+                }
+              }
+            >
+              <Text
+                accessible={true}
+                allowFontScaling={true}
+                ellipsizeMode="tail"
+                numberOfLines={1}
+                style={
+                  Array [
+                    Object {
+                      "color": "grey",
+                      "fontSize": 15,
+                    },
+                    Object {
+                      "fontFamily": "Avenir",
+                      "fontSize": 17,
+                    },
+                  ]
+                }
+              >
+                
+              </Text>
+            </View>
+          </View>
+        </View>
+        <Text
+          accessible={true}
+          allowFontScaling={false}
+          ellipsizeMode="tail"
+          style={
+            Array [
+              Object {
+                "color": undefined,
+                "fontSize": 12,
+              },
+              Object {
+                "color": "gold",
+                "fontSize": 24,
+                "position": "absolute",
+                "right": 5,
+                "top": 10,
+              },
+              Object {
+                "fontFamily": "Material Icons",
+                "fontStyle": "normal",
+                "fontWeight": "normal",
+              },
+            ]
+          }
+        >
+          
+        </Text>
+      </View>
+    </View>
+    <View />
+    <View />
+  </View>
+</View>
+`;
+
 exports[`>>>Header --- Snapshot render correctly 1`] = `
 <View
   style={
