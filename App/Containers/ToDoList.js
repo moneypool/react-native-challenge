@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import {
   View
 } from 'react-native'
-import Header from '../Components/Header'
-import CustomList from '../Components/CustomList'
+import Header from './Header'
+import CustomList from './CustomList'
 import Styles from './Styles/ToDoListStyle'
 import { connect } from 'react-redux'
 import StartupActions from '../Redux/StartupRedux'
