@@ -4,6 +4,7 @@ import {
   TextInput,
   TouchableWithoutFeedback
 } from 'react-native'
+import * as Animatable from 'react-native-animatable'
 import { connect } from 'react-redux'
 import Swipeout from 'react-native-swipeout'
 import CheckBox from 'react-native-checkbox'
@@ -29,7 +30,7 @@ export class CustomListItem extends React.Component {
   constructor (props) {
     super(props)
 
-    const { title = '' } = this.props
+    const { title = '' } = this.props.taskInfo || {}
 
     this.state = {
       editMode: false,
@@ -51,15 +52,47 @@ export class CustomListItem extends React.Component {
 
   _toggleEdit () {
     this.setState({ editMode: !this.state.editMode })
+
+    const { editMode } = this.state
+    // If buttons are shown, animate in the input. Else animate in the buttons
+    if (!editMode) {
+      this.refs.cellContainer.lightSpeedOut(250)
+        .then(endState => {
+          if (endState.finished) {
+            // When new state is set, animate in the new container
+            this.setState({ editMode: true }, () => {
+              this.refs.inputContainer.lightSpeedIn(250)
+            })
+          }
+        })
+    } else {
+      this.refs.inputContainer.lightSpeedOut(250)
+        .then(endState => {
+          if (endState.finished) {
+            // When new state is set, animate in the new container
+            this.setState({ editMode: false }, () => {
+              this.refs.cellContainer.lightSpeedIn(250)
+            })
+          }
+        })
+    }
   }
 
   _handleEditTask = (editText) => this.setState({ editText })
 
   _handlePressEdit = () => {
-    const { editText, editMode } = this.state
+    const { editText } = this.state
     const { index } = this.props.taskInfo
     this.props.editTask(editText, index)
-    this.setState({ editMode: !editMode })
+    this.refs.inputContainer.lightSpeedOut(300)
+      .then(endState => {
+        if (endState.finished) {
+          // When new state is set, animate in the new container
+          this.setState({ editMode: false }, () => {
+            this.refs.cellContainer.lightSpeedIn(300)
+          })
+        }
+      })
   }
 
   _renderFavorite (favorite) {
@@ -96,27 +129,31 @@ export class CustomListItem extends React.Component {
     // When edit mode is off, the normal cell is rendered, with the checkbox
     if (!editMode) {
       return (
-        <Swipeout
-          right={swipeBtns}
-          autoClose
-          backgroundColor='transparent'>
-          <View>
-            <CheckBox
-              label={title}
-              checked={completed}
-              onChange={() => this._onToggleCheckbox(index)}
-              containerStyle={Styles.listCheckboxContainer}
-              checkboxStyle={Styles.listCheckbox}
-              labelStyle={Styles.listText}
-            />
-            {this._renderFavorite(favorite)}
-          </View>
-        </Swipeout>
+        <Animatable.View
+          ref='cellContainer'>
+          <Swipeout
+            right={swipeBtns}
+            autoClose
+            backgroundColor='transparent'>
+            <View>
+              <CheckBox
+                label={title}
+                checked={completed}
+                onChange={() => this._onToggleCheckbox(index)}
+                containerStyle={Styles.listCheckboxContainer}
+                checkboxStyle={Styles.listCheckbox}
+                labelStyle={Styles.listText}
+              />
+              {this._renderFavorite(favorite)}
+            </View>
+          </Swipeout>
+        </Animatable.View>
       )
     } else {
       // Edit mode is on, so render input
       return (
-        <View>
+        <Animatable.View
+          ref='inputContainer'>
           <View style={Styles.editInput}>
             <TextInput
               style={Styles.editInputText}
@@ -137,7 +174,7 @@ export class CustomListItem extends React.Component {
           <TouchableWithoutFeedback onPress={() => this._toggleEdit()}>
             <Icon style={[Styles.editButtons, Styles.editClose]} name='close' />
           </TouchableWithoutFeedback>
-        </View>
+        </Animatable.View>
       )
     }
   }
