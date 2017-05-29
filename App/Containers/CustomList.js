@@ -11,7 +11,7 @@ import { filter, sort, toLower } from 'ramda'
 import Styles from './Styles/CustomListStyles'
 import ToDosActions from '../Redux/ToDosRedux'
 
-class CustomList extends React.Component {
+export class CustomList extends React.Component {
   static propTypes = {
     dispatch: PropTypes.func,
     tasks: PropTypes.array,
@@ -56,7 +56,7 @@ class CustomList extends React.Component {
   _renderResults () {
     const { dataSource } = this.state
     const { tasks } = this.props
-    if (tasks.length) {
+    if (tasks && tasks.length) {
       return (
         <ListView
           enableEmptySections

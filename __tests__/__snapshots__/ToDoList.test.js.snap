@@ -294,6 +294,53 @@ exports[`>>>App --- Snapshot render correctly 1`] = `
 </View>
 `;
 
+exports[`>>>CustomList --- Snapshot render correctly 1`] = `
+<RCTScrollView
+  style={
+    Object {
+      "backgroundColor": "#D0E0DD",
+    }
+  }
+>
+  <View>
+    <View>
+      <Text
+        accessible={true}
+        allowFontScaling={true}
+        ellipsizeMode="tail"
+        style={
+          Object {
+            "color": "#e32f66",
+            "fontSize": 34,
+            "fontWeight": "bold",
+            "marginTop": 20,
+            "textAlign": "center",
+          }
+        }
+      >
+        No tasks yet :(
+      </Text>
+      <Text
+        accessible={true}
+        allowFontScaling={true}
+        ellipsizeMode="tail"
+        style={
+          Object {
+            "color": "#e32f66",
+            "fontSize": 34,
+            "fontWeight": "bold",
+            "marginTop": 20,
+            "textAlign": "center",
+          }
+        }
+      >
+        Let's add something fun
+      </Text>
+    </View>
+  </View>
+</RCTScrollView>
+`;
+
 exports[`>>>Header --- Snapshot render correctly 1`] = `
 <View
   style={

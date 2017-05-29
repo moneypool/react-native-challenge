@@ -1,9 +1,11 @@
 import React from 'react'
 import {
-  TextInput
+  TextInput,
+  Text
 } from 'react-native'
 import { shallow } from 'enzyme'
 import { Header } from '../App/Containers/Header'
+import { CustomList } from '../App/Containers/CustomList'
 import App from '../App/Containers/App'
 import PillButton from '../App/Components/PillButton'
 
@@ -50,11 +52,21 @@ describe('>>>Header --- Snapshot', () => {
   })
 })
 
-describe('>>>Header --- Shallow Render REACT COMPONENTS', () => {
+describe('>>>CustomList --- Snapshot', () => {
+  it('render correctly', () => {
+    const renderedComponent = renderer.create(
+      <CustomList />
+    ).toJSON()
+    expect(renderedComponent).toMatchSnapshot()
+  })
+})
+
+describe('>>>Header --- Shallow Render', () => {
   let wrapper
 
   beforeEach(() => {
     wrapper = shallow(<Header />)
+    wrapper.setProps({ tasks })
   })
 
   it('render the dumb component', () => {
@@ -77,7 +89,22 @@ describe('>>>Header --- Shallow Render REACT COMPONENTS', () => {
   })
 
   it('pending button, contains correct pending tasks number', () => {
-    wrapper.setProps({ tasks })
     expect(wrapper.find(PillButton).at(2).props().text).toBe('Pending - 1')
+  })
+})
+
+describe('>>>CustomList --- Shallow Render', () => {
+  let wrapper
+
+  beforeEach(() => {
+    wrapper = shallow(<CustomList />)
+  })
+
+  it('render the dumb component', () => {
+    expect(wrapper.length).toEqual(1)
+  })
+
+  it('containt no results text when no tasks are defined', () => {
+    expect(wrapper.find(Text)).toHaveLength(2)
   })
 })
