@@ -106,5 +106,7 @@ describe('>>>CustomList --- Shallow Render', () => {
 
   it('containt no results text when no tasks are defined', () => {
     expect(wrapper.find(Text)).toHaveLength(2)
+    expect(wrapper.find(Text).first().props().children).toBe('No tasks yet :(')
+    expect(wrapper.find(Text).last().props().children).toBe(`Let's add something fun`)
   })
 })
