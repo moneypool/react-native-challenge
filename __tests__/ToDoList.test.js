@@ -1,11 +1,36 @@
-import 'react-native'
 import React from 'react'
+import {
+  TextInput
+} from 'react-native'
 import { shallow } from 'enzyme'
+import { Header } from '../App/Containers/Header'
 import App from '../App/Containers/App'
-import { Header } from '../App/Components/Header'
+import PillButton from '../App/Components/PillButton'
 
 // Note: test renderer must be required after react-native.
 import renderer from 'react-test-renderer'
+
+// Contains 2 completed tasks, and 1 pending
+const tasks = [
+  {
+    title: 'Take a shower',
+    index: 1,
+    completed: false,
+    favorite: true
+  },
+  {
+    title: 'Drink water',
+    index: 2,
+    completed: true,
+    favorite: false
+  },
+  {
+    title: 'Go to the store',
+    index: 3,
+    completed: true,
+    favorite: false
+  }
+]
 
 describe('>>>App --- Snapshot', () => {
   it('render correctly', () => {
@@ -27,13 +52,32 @@ describe('>>>Header --- Snapshot', () => {
 
 describe('>>>Header --- Shallow Render REACT COMPONENTS', () => {
   let wrapper
-  const tasks = []
 
   beforeEach(() => {
-    wrapper = shallow(<Header tasks={tasks} />)
+    wrapper = shallow(<Header />)
   })
 
   it('render the dumb component', () => {
     expect(wrapper.length).toEqual(1)
+  })
+
+  it('contains three buttons when rendered', () => {
+    expect(wrapper.find(PillButton)).toHaveLength(3)
+  })
+
+  it('contains no buttons when addMode active', () => {
+    expect(wrapper.find(PillButton)).toHaveLength(3)
+    wrapper.setState({ addMode: true })
+    expect(wrapper.find(PillButton)).toHaveLength(0)
+  })
+
+  it('contains input addMode', () => {
+    wrapper.setState({ addMode: true })
+    expect(wrapper.find(TextInput)).toHaveLength(1)
+  })
+
+  it('pending button, contains correct pending tasks number', () => {
+    wrapper.setProps({ tasks })
+    expect(wrapper.find(PillButton).at(2).props().text).toBe('Pending - 1')
   })
 })

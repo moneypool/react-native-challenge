@@ -34,7 +34,7 @@ export class Header extends React.Component {
     // Get data from Redux
     const { tasks } = nextProps
     // Get pending tasks length
-    const pendingLength = filter(n => !n.completed, tasks).length
+    const pendingLength = tasks ? filter(n => !n.completed, tasks).length : 0
 
     // Update dataSource with completely processed data
     this.setState({ pendingLength })
