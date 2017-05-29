@@ -9,6 +9,7 @@ import { CustomList } from '../App/Containers/CustomList'
 import { CustomListItem } from '../App/Components/CustomListItem'
 import App from '../App/Containers/App'
 import PillButton from '../App/Components/PillButton'
+import * as Animatable from 'react-native-animatable'
 
 // Note: test renderer must be required after react-native.
 import renderer from 'react-test-renderer'
@@ -115,8 +116,9 @@ describe('>>>CustomList --- Shallow Render', () => {
   })
 
   it('containt no results text when no tasks are defined', () => {
-    expect(wrapper.find(Text)).toHaveLength(2)
-    expect(wrapper.find(Text).first().props().children).toBe('No tasks yet :(')
+    expect(wrapper.find(Animatable.Text)).toHaveLength(1)
+    expect(wrapper.find(Text)).toHaveLength(1)
+    expect(wrapper.find(Animatable.Text).first().props().children).toBe('No tasks yet :(')
     expect(wrapper.find(Text).last().props().children).toBe(`Let's add something fun`)
   })
 })

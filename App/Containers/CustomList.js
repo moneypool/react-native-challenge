@@ -5,6 +5,7 @@ import {
   ListView,
   Text
 } from 'react-native'
+import * as Animatable from 'react-native-animatable'
 import { connect } from 'react-redux'
 import CustomListItem from '../Components/CustomListItem'
 import { filter, sort, toLower } from 'ramda'
@@ -68,7 +69,7 @@ export class CustomList extends React.Component {
     } else {
       return (
         <View>
-          <Text style={Styles.noResults}>No tasks yet :(</Text>
+          <Animatable.Text animation='pulse' easing='ease-out' iterationCount='infinite' style={Styles.noResults}>No tasks yet :(</Animatable.Text>
           <Text style={Styles.noResults}>Let's add something fun</Text>
         </View>
       )

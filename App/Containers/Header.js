@@ -5,6 +5,7 @@ import {
   TouchableWithoutFeedback,
   TextInput
 } from 'react-native'
+import * as Animatable from 'react-native-animatable'
 import { connect } from 'react-redux'
 import { filter } from 'ramda'
 import PillButton from '../Components/PillButton'
@@ -40,13 +41,45 @@ export class Header extends React.Component {
     this.setState({ pendingLength })
   }
 
-  _onToggleAdd = () => this.setState({ addMode: !this.state.addMode, newTask: '' })
+  _onToggleAdd = () => {
+    const { addMode } = this.state
+    // If buttons are shown, animate in the input. Else animate in the buttons
+    if (!addMode) {
+      this.refs.buttonsContainer.fadeOut(300)
+        .then(endState => {
+          if (endState.finished) {
+            // When new state is set, animate in the new container
+            this.setState({ addMode: true, newTask: '' }, () => {
+              this.refs.inputContainer.fadeIn(300)
+            })
+          }
+        })
+    } else {
+      this.refs.inputContainer.fadeOut(300)
+        .then(endState => {
+          if (endState.finished) {
+            // When new state is set, animate in the new container
+            this.setState({ addMode: false, newTask: '' }, () => {
+              this.refs.buttonsContainer.fadeIn(300)
+            })
+          }
+        })
+    }
+  }
 
   _handleChangeTask = (newTask) => this.setState({ newTask })
   _handlePressAdd = () => {
-    const { newTask, addMode } = this.state
+    const { newTask } = this.state
     this.props.addTask(newTask)
-    this.setState({ addMode: !addMode, newTask: '' })
+    this.refs.inputContainer.fadeOut(300)
+      .then(endState => {
+        if (endState.finished) {
+          // When new state is set, animate in the new container
+          this.setState({ addMode: false, newTask: '' }, () => {
+            this.refs.buttonsContainer.fadeIn(300)
+          })
+        }
+      })
   }
 
   _onPressFilterAll = () => {
@@ -66,7 +99,8 @@ export class Header extends React.Component {
     const { addMode, selectedFilter, newTask, pendingLength } = this.state
     if (addMode) {
       return (
-        <View>
+        <Animatable.View
+          ref='inputContainer'>
           <View style={Styles.addInput}>
             <TextInput
               style={Styles.addInputText}
@@ -82,11 +116,13 @@ export class Header extends React.Component {
           <TouchableWithoutFeedback onPress={this._handlePressAdd}>
             <Icon style={Styles.addSubmit} name='check-circle' />
           </TouchableWithoutFeedback>
-        </View>
+        </Animatable.View>
       )
     } else {
       return (
-        <View style={Styles.filters}>
+        <Animatable.View
+          style={Styles.filters}
+          ref='buttonsContainer'>
           <PillButton
             text={'All'}
             onPress={this._onPressFilterAll}
@@ -99,7 +135,7 @@ export class Header extends React.Component {
             text={`Pending - ${pendingLength}`}
             onPress={this._onPressFilterPending}
             isActive={selectedFilter === 'Pending'} />
-        </View>
+        </Animatable.View>
       )
     }
   }

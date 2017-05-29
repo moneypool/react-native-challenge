@@ -267,6 +267,11 @@ exports[`>>>App --- Snapshot render correctly 1`] = `
               "fontWeight": "bold",
               "marginTop": 20,
               "textAlign": "center",
+              "transform": Array [
+                Object {
+                  "scale": 1,
+                },
+              ],
             }
           }
         >
@@ -315,6 +320,11 @@ exports[`>>>CustomList --- Snapshot render correctly 1`] = `
             "fontWeight": "bold",
             "marginTop": 20,
             "textAlign": "center",
+            "transform": Array [
+              Object {
+                "scale": 1,
+              },
+            ],
           }
         }
       >
